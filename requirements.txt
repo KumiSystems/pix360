@@ -1,0 +1,11 @@
+Django
+mysqlclient
+django-storages
+boto3
+mozilla-django-oidc
+argon2-cffi
+
+django-autosecretkey
+
+git+https://kumig.it/kumisystems/pix360core.git
+git+https://kumig.it/kumisystems/pix360_krpano.git
