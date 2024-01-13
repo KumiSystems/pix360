@@ -127,7 +127,9 @@ if "OIDC" in CONFIG:
     OIDC_CREATE_USER = CONFIG.getboolean("OIDC", "CreateUsers", fallback=False)
     OIDC_RP_SIGN_ALGO = CONFIG.get("OIDC", "Algorithm", fallback="RS256")
 
-    MIDDLEWARE.append("mozilla_django_oidc.middleware.SessionRefresh")
+    if expiry := CONFIG.getint("OIDC", "SessionValidity", fallback=0):
+        MIDDLEWARE.append("mozilla_django_oidc.middleware.SessionRefresh")
+        OIDC_RENEW_ID_TOKEN_EXPIRY_SECONDS = expiry * 60
 
 AUTH_PASSWORD_VALIDATORS = [
     {
