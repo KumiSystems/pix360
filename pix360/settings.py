@@ -176,7 +176,6 @@ STATIC_ROOT = None if DEBUG else CONFIG.get(
 CORE_STATIC_DIR = Path(pix360core.__file__).parent / "static"
 
 STATICFILES_DIRS = [
-    CORE_STATIC_DIR,
 ]
 
 # Settings for uploaded files
