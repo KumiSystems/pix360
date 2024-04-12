@@ -14,10 +14,14 @@ CONFIG = ASK.config
 
 SECRET_KEY = ASK.secret_key
 DEBUG = CONFIG.getboolean("PIX360", "Debug", fallback=False)
-ALLOWED_HOSTS = [h.strip() for h in CONFIG.get("PIX360", "Hosts", fallback="localhost").split(",")]
+ALLOWED_HOSTS = [
+    h.strip() for h in CONFIG.get("PIX360", "Hosts", fallback="localhost").split(",")
+]
 CSRF_TRUSTED_ORIGINS = [f"https://{h}" for h in ALLOWED_HOSTS]
 
-SECURE_PROXY_SSL_HEADER_NAME = CONFIG.get("KEYLOG", "SSLHeaderName", fallback="HTTP_X_FORWARDED_PROTO")
+SECURE_PROXY_SSL_HEADER_NAME = CONFIG.get(
+    "KEYLOG", "SSLHeaderName", fallback="HTTP_X_FORWARDED_PROTO"
+)
 SECURE_PROXY_SSL_HEADER_VALUE = CONFIG.get("KEYLOG", "SSLHeaderValue", fallback="https")
 SECURE_PROXY_SSL_HEADER = (SECURE_PROXY_SSL_HEADER_NAME, SECURE_PROXY_SSL_HEADER_VALUE)
 
@@ -31,7 +35,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "pix360core",
 ]
 
@@ -71,21 +74,21 @@ WSGI_APPLICATION = "pix360.wsgi.application"
 
 if (dbtype := "MySQL") in CONFIG or (dbtype := "MariaDB") in CONFIG:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': CONFIG.get(dbtype, "Database"),
-            'USER': CONFIG.get(dbtype, "Username"),
-            'PASSWORD': CONFIG.get(dbtype, "Password"),
-            'HOST': CONFIG.get(dbtype, "Host", fallback="localhost"),
-            'PORT': CONFIG.getint(dbtype, "Port", fallback=3306)
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": CONFIG.get(dbtype, "Database"),
+            "USER": CONFIG.get(dbtype, "Username"),
+            "PASSWORD": CONFIG.get(dbtype, "Password"),
+            "HOST": CONFIG.get(dbtype, "Host", fallback="localhost"),
+            "PORT": CONFIG.getint(dbtype, "Port", fallback=3306),
         }
     }
 
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 
@@ -112,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 if "OIDC" in CONFIG:
     AUTHENTICATION_BACKENDS = [
-        'pix360core.backends.OIDCBackend',
+        "pix360core.backends.OIDCBackend",
     ]
 
     LOGIN_URL = reverse_lazy("oidc_authentication_init")
@@ -133,16 +136,16 @@ if "OIDC" in CONFIG:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -170,15 +173,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
-STATIC_ROOT = None if DEBUG else CONFIG.get(
-    "PIX360", "StaticRoot", fallback=None)
+STATIC_ROOT = None if DEBUG else CONFIG.get("PIX360", "StaticRoot", fallback=None)
 
 CORE_STATIC_DIR = Path(pix360core.__file__).parent / "static"
 
-STATICFILES_DIRS = [
-]
+STATICFILES_DIRS = []
 
 # Settings for uploaded files
 
@@ -186,8 +187,8 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = CONFIG.get("PIX360", "MediaRoot", fallback=BASE_DIR / "media")
 
 if "S3" in CONFIG:
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
     AWS_ACCESS_KEY_ID = CONFIG.get("S3", "AccessKey")
     AWS_SECRET_ACCESS_KEY = CONFIG.get("S3", "SecretKey")
     AWS_STORAGE_BUCKET_NAME = CONFIG.get("S3", "Bucket")
