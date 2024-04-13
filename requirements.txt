@@ -7,4 +7,4 @@ argon2-cffi
 
 django-autosecretkey
 
-git+https://kumig.it/kumisystems/pix360core.git
+git+https://git.private.coffee/kumisystems/pix360core.git
